@@ -1,4 +1,5 @@
 import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
@@ -19,16 +20,24 @@ const GlassmorphicHero = () => {
                 Rejoignez-nous dans la prière, la communion et l'adoration. Notre église vous accueille avec joie pour partager ensemble la Parole de Dieu.
               </p>
               <div className="mt-8 sm:mt-12 lg:mt-14 flex w-full flex-col justify-center gap-3 sm:flex-row sm:gap-4">
-                <Button className="group transition-all rounded-full w-full sm:w-48 duration-300 hover:scale-105 hover:shadow-lg bg-primary hover:bg-primary/90">
-                  Découvrir notre église
-                  <ChevronRight className="ml-2 h-4 transition-transform group-hover:translate-x-1" />
+                <Button 
+                  asChild
+                  className="group transition-all rounded-full w-full sm:w-48 duration-300 hover:scale-105 hover:shadow-lg bg-primary hover:bg-primary/90"
+                >
+                  <Link href="#about">
+                    Découvrir notre église
+                    <ChevronRight className="ml-2 h-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </Button>
                 <Button
+                  asChild
                   variant="ghost"
                   className="group transition-all duration-300 hover:bg-violet-100/50 hover:scale-105 text-accent hover:text-accent w-full sm:w-auto"
                 >
-                  Horaires de culte
-                  <ChevronRight className="ml-2 h-4 transition-transform group-hover:translate-x-1" />
+                  <Link href="#contact">
+                    Horaires de culte
+                    <ChevronRight className="ml-2 h-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
                 </Button>
               </div>
             </div>

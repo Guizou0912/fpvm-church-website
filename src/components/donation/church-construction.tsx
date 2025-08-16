@@ -4,8 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Building2, Church, Heart, Users, Hammer, Wrench, BrickWall, Shield } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const ChurchConstructionSection = () => {
+  const router = useRouter();
+
   const donationAmounts = [
     { amount: 50000, label: "50 000 Ar" },
     { amount: 100000, label: "100 000 Ar" },
@@ -22,6 +25,11 @@ export const ChurchConstructionSection = () => {
   ];
 
   const totalProgress = 52;
+
+  const handleDonationClick = (amount?: number) => {
+    const query = amount ? `?amount=${amount}` : '';
+    router.push(`/donation${query}`);
+  };
 
   return (
     <section className="relative min-h-screen py-20 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-violet-50">
@@ -118,6 +126,7 @@ export const ChurchConstructionSection = () => {
                     <Button
                       key={index}
                       variant="outline"
+                      onClick={() => handleDonationClick(donation.amount)}
                       className="h-16 bg-white/60 backdrop-blur-sm border-white/30 hover:bg-blue-50/80 hover:border-blue-200 transition-all duration-300"
                     >
                       {donation.label}
@@ -125,6 +134,7 @@ export const ChurchConstructionSection = () => {
                   ))}
                   <Button
                     variant="outline"
+                    onClick={() => handleDonationClick()}
                     className="h-16 bg-gradient-to-r from-blue-50/80 to-violet-50/80 backdrop-blur-sm border-white/30 hover:from-blue-100/80 hover:to-violet-100/80 transition-all duration-300"
                   >
                     Montant libre
@@ -132,15 +142,26 @@ export const ChurchConstructionSection = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <Button className="w-full h-14 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-lg font-semibold shadow-xl transform hover:scale-105 transition-all duration-300">
+                  <Button 
+                    onClick={() => handleDonationClick()}
+                    className="w-full h-14 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-lg font-semibold shadow-xl transform hover:scale-105 transition-all duration-300"
+                  >
                     Donner Maintenant
                   </Button>
                   
                   <div className="grid grid-cols-2 gap-3">
-                    <Button variant="outline" className="bg-white/60 backdrop-blur-sm border-white/30 hover:bg-green-50/80">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => handleDonationClick()}
+                      className="bg-white/60 backdrop-blur-sm border-white/30 hover:bg-green-50/80"
+                    >
                       Mobile Money
                     </Button>
-                    <Button variant="outline" className="bg-white/60 backdrop-blur-sm border-white/30 hover:bg-blue-50/80">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => handleDonationClick()}
+                      className="bg-white/60 backdrop-blur-sm border-white/30 hover:bg-blue-50/80"
+                    >
                       Virement Bancaire
                     </Button>
                   </div>
@@ -230,6 +251,7 @@ export const ChurchConstructionSection = () => {
               </p>
               <Button 
                 size="lg" 
+                onClick={() => handleDonationClick()}
                 className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-lg px-8 py-4 shadow-xl transform hover:scale-105 transition-all duration-300"
               >
                 Faire un Don Maintenant

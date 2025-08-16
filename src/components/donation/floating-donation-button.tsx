@@ -2,16 +2,17 @@
 
 import { Heart } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const FloatingDonationButton = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const router = useRouter();
 
   const handleClick = () => {
     setIsClicked(true);
     setTimeout(() => setIsClicked(false), 150);
-    // TODO: Add donation functionality here
-    console.log("Donation button clicked");
+    router.push("/donation");
   };
 
   return (
