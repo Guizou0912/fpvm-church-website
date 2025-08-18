@@ -59,33 +59,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-violet-50">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-white/20 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center space-x-3">
-              <Cross className="h-8 w-8 text-blue-600" />
-              <span className="font-bold text-xl text-slate-800">FPVM TENY FIAINANA</span>
-            </Link>
-            <div className="hidden md:flex items-center space-x-8">
-              <Link href="/about" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
-                À propos
-              </Link>
-              <Link href="/gallery" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
-                Galerie
-              </Link>
-              <Link href="/contact" className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
-                Contact
-              </Link>
-              <Link href="/donation">
-                <Button className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-medium px-6">
-                  Faire un don
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Floating Donation Button */}
+      <Link href="/donation" className="fixed bottom-8 right-8 z-50">
+        <Button 
+          size="lg" 
+          className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 rounded-full px-6 py-3"
+        >
+          <Heart className="mr-2 h-5 w-5 animate-pulse" />
+          Faire un don
+        </Button>
+      </Link>
 
       {/* Hero Section */}
       <section className="relative py-20 px-4 overflow-hidden">
