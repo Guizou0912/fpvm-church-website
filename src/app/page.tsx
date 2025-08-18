@@ -58,12 +58,12 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-violet-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50">
       {/* Floating Donation Button */}
       <Link href="/donation" className="fixed bottom-8 right-8 z-50">
         <Button 
           size="lg" 
-          className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 rounded-full px-6 py-3"
+          className="bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 rounded-full px-6 py-3"
         >
           <Heart className="mr-2 h-5 w-5 animate-pulse" />
           Faire un don
@@ -72,19 +72,19 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative py-20 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-violet-600/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-transparent to-purple-600/10" />
         <div className="relative max-w-7xl mx-auto text-center">
           <div className="backdrop-blur-md bg-white/80 rounded-3xl border border-white/20 shadow-xl p-12 mb-8">
-            <Badge variant="secondary" className="bg-blue-100/80 text-blue-800 mb-6 px-4 py-2">
+            <Badge variant="secondary" className="bg-purple-100/80 text-purple-800 mb-6 px-4 py-2">
               Église Protestante FPVM
             </Badge>
             <h1 className="text-5xl md:text-7xl font-bold text-slate-800 mb-6 leading-tight">
               FPVM FR-MG<br />
-              <span className="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-purple-600 to-purple-600 bg-clip-text text-transparent">
                 TENY FIAINANA
               </span>
             </h1>
-            <h2 className="text-3xl md:text-4xl font-semibold text-blue-600 mb-8">
+            <h2 className="text-3xl md:text-4xl font-semibold text-purple-600 mb-8">
               ANALAMAHITSY
             </h2>
             <p className="text-xl text-slate-600 mb-10 max-w-4xl mx-auto leading-relaxed">
@@ -92,7 +92,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/about">
-                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white px-8 py-3 text-lg font-medium">
+                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700 text-white px-8 py-3 text-lg font-medium">
                   Découvrir notre église
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -121,10 +121,10 @@ export default function Home() {
             {serviceSchedule.map((service, index) => (
               <Card key={index} className="backdrop-blur-md bg-white/80 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
                 <CardContent className="p-6 text-center">
-                  <Clock className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                  <Clock className="h-12 w-12 text-purple-600 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-slate-800 mb-2">{service.day}</h3>
-                  <p className="text-2xl font-semibold text-violet-600 mb-2">{service.time}</p>
-                  <Badge variant="secondary" className="bg-blue-100/80 text-blue-800">
+                  <p className="text-2xl font-semibold text-purple-600 mb-2">{service.time}</p>
+                  <Badge variant="secondary" className="bg-purple-100/80 text-purple-800">
                     {service.type}
                   </Badge>
                 </CardContent>
@@ -135,7 +135,7 @@ export default function Home() {
       </section>
 
       {/* About Preview Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-blue-50/50 to-violet-50/50">
+      <section className="py-16 px-4 bg-gradient-to-r from-purple-50/50 to-purple-50/50">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -151,7 +151,7 @@ export default function Home() {
                 dédiée à l'adoration de Dieu, à l'édification mutuelle et au service de notre communauté.
               </p>
               <Link href="/about">
-                <Button size="lg" className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white">
+                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700 text-white">
                   En savoir plus
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -161,19 +161,19 @@ export default function Home() {
               <CardContent className="p-8">
                 <div className="grid grid-cols-2 gap-6">
                   <div className="text-center">
-                    <div className="text-4xl font-bold text-blue-600 mb-2">250+</div>
+                    <div className="text-4xl font-bold text-purple-600 mb-2">250+</div>
                     <p className="text-slate-600">Membres Actifs</p>
                   </div>
                   <div className="text-center">
-                    <div className="text-4xl font-bold text-violet-600 mb-2">35+</div>
+                    <div className="text-4xl font-bold text-purple-600 mb-2">35+</div>
                     <p className="text-slate-600">Années de Service</p>
                   </div>
                   <div className="text-center">
-                    <div className="text-4xl font-bold text-blue-600 mb-2">15</div>
+                    <div className="text-4xl font-bold text-purple-600 mb-2">15</div>
                     <p className="text-slate-600">Programmes</p>
                   </div>
                   <div className="text-center">
-                    <div className="text-4xl font-bold text-violet-600 mb-2">500+</div>
+                    <div className="text-4xl font-bold text-purple-600 mb-2">500+</div>
                     <p className="text-slate-600">Familles Aidées</p>
                   </div>
                 </div>
@@ -204,7 +204,7 @@ export default function Home() {
                   />
                 </div>
                 <CardContent className="p-6">
-                  <Badge variant="secondary" className="bg-blue-100/80 text-blue-800 mb-3">
+                  <Badge variant="secondary" className="bg-purple-100/80 text-purple-800 mb-3">
                     {event.date}
                   </Badge>
                   <h3 className="text-xl font-bold text-slate-800 mb-3">{event.title}</h3>
@@ -226,7 +226,7 @@ export default function Home() {
       </section>
 
       {/* Ministries Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-violet-50/50 to-blue-50/50">
+      <section className="py-16 px-4 bg-gradient-to-r from-purple-50/50 to-purple-50/50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-slate-800 mb-6">Nos Ministères</h2>
@@ -240,8 +240,8 @@ export default function Home() {
             {ministries.map((ministry, index) => (
               <Card key={index} className="backdrop-blur-md bg-white/80 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 text-center group">
                 <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-violet-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <ministry.icon className="h-8 w-8 text-blue-600" />
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <ministry.icon className="h-8 w-8 text-purple-600" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-800 mb-4">{ministry.title}</h3>
                   <p className="text-slate-600">{ministry.description}</p>
@@ -266,8 +266,8 @@ export default function Home() {
               
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-violet-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <MapPin className="h-8 w-8 text-blue-600" />
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <MapPin className="h-8 w-8 text-purple-600" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-800 mb-2">Adresse</h3>
                   <p className="text-slate-600">
@@ -277,8 +277,8 @@ export default function Home() {
                 </div>
                 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-violet-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Phone className="h-8 w-8 text-violet-600" />
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Phone className="h-8 w-8 text-purple-600" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-800 mb-2">Téléphone</h3>
                   <p className="text-slate-600">
@@ -288,8 +288,8 @@ export default function Home() {
                 </div>
                 
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-violet-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Mail className="h-8 w-8 text-blue-600" />
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Mail className="h-8 w-8 text-purple-600" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-800 mb-2">Email</h3>
                   <p className="text-slate-600">
@@ -301,7 +301,7 @@ export default function Home() {
               
               <div className="text-center mt-12">
                 <Link href="/contact">
-                  <Button size="lg" className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white px-8 py-3">
+                  <Button size="lg" className="bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700 text-white px-8 py-3">
                     Nous contacter
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
@@ -318,7 +318,7 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center space-x-3 mb-4">
-                <Cross className="h-8 w-8 text-blue-400" />
+                <Cross className="h-8 w-8 text-purple-400" />
                 <span className="font-bold text-xl text-white">FPVM TENY FIAINANA</span>
               </div>
               <p className="text-slate-300 leading-relaxed">
@@ -329,16 +329,16 @@ export default function Home() {
             <div>
               <h4 className="font-semibold text-white mb-4">Navigation</h4>
               <div className="space-y-2">
-                <Link href="/about" className="block text-slate-300 hover:text-blue-400 transition-colors">
+                <Link href="/about" className="block text-slate-300 hover:text-purple-400 transition-colors">
                   À propos
                 </Link>
-                <Link href="/gallery" className="block text-slate-300 hover:text-blue-400 transition-colors">
+                <Link href="/gallery" className="block text-slate-300 hover:text-purple-400 transition-colors">
                   Galerie
                 </Link>
-                <Link href="/contact" className="block text-slate-300 hover:text-blue-400 transition-colors">
+                <Link href="/contact" className="block text-slate-300 hover:text-purple-400 transition-colors">
                   Contact
                 </Link>
-                <Link href="/donation" className="block text-slate-300 hover:text-blue-400 transition-colors">
+                <Link href="/donation" className="block text-slate-300 hover:text-purple-400 transition-colors">
                   Faire un don
                 </Link>
               </div>
