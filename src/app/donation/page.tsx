@@ -1,439 +1,477 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
-import {
-  Heart,
-  Church,
-  Users,
-  Target,
-  CreditCard,
-  Smartphone,
-  Building2,
-  Mail,
-  Phone,
-  MapPin,
-  Check,
-  ArrowRight,
-  Banknote
+import { 
+  Heart, 
+  Church, 
+  Users, 
+  Building, 
+  Phone, 
+  Mail, 
+  CreditCard, 
+  Smartphone, 
+  Banknote,
+  CheckCircle,
+  AlertCircle,
+  Loader2
 } from 'lucide-react';
 
-interface DonationFormData {
-  amount: string;
-  paymentMethod: string;
+interface DonorInfo {
   name: string;
   email: string;
   phone: string;
   message: string;
 }
 
+interface DonationForm {
+  amount: number;
+  type: string;
+  paymentMethod: string;
+  donor: DonorInfo;
+}
+
 export default function DonationPage() {
-  const searchParams = useSearchParams();
-  const preselectedAmount = searchParams.get('amount');
-  
-  const [selectedAmount, setSelectedAmount] = useState<string>(preselectedAmount || '');
+  const [selectedAmount, setSelectedAmount] = useState<number>(0);
   const [customAmount, setCustomAmount] = useState<string>('');
+  const [donationType, setDonationType] = useState<string>('');
   const [paymentMethod, setPaymentMethod] = useState<string>('');
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [formData, setFormData] = useState<DonationFormData>({
-    amount: '',
-    paymentMethod: '',
+  const [donorInfo, setDonorInfo] = useState<DonorInfo>({
     name: '',
     email: '',
     phone: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (preselectedAmount) {
-      setSelectedAmount(preselectedAmount);
-      setFormData(prev => ({ ...prev, amount: preselectedAmount }));
-    }
-  }, [preselectedAmount]);
+  const predefinedAmounts = [10000, 25000, 50000, 100000];
+  const currentProgress = 65; // 65% funded
+  const goalAmount = 500000000; // 500M Ariary
+  const currentAmount = 325000000; // 325M Ariary
 
-  const donationAmounts = [
-    { value: '50000', label: '50 000 Ar' },
-    { value: '100000', label: '100 000 Ar' },
-    { value: '250000', label: '250 000 Ar' },
-    { value: '500000', label: '500 000 Ar' },
-    { value: '1000000', label: '1 000 000 Ar' }
-  ];
-
-  const paymentMethods = [
-    { value: 'mobile', label: 'Mobile Money', icon: Smartphone },
-    { value: 'bank', label: 'Virement bancaire', icon: Building2 },
-    { value: 'card', label: 'Carte bancaire', icon: CreditCard },
-    { value: 'cash', label: 'Espèces', icon: Banknote }
-  ];
-
-  const currentAmount = 15000000;
-  const targetAmount = 50000000;
-  const progressPercentage = (currentAmount / targetAmount) * 100;
-
-  const handleAmountSelect = (amount: string) => {
+  const handleAmountSelect = (amount: number) => {
     setSelectedAmount(amount);
     setCustomAmount('');
-    setFormData(prev => ({ ...prev, amount }));
   };
 
   const handleCustomAmountChange = (value: string) => {
     setCustomAmount(value);
-    setSelectedAmount('');
-    setFormData(prev => ({ ...prev, amount: value }));
-  };
-
-  const handlePaymentMethodChange = (method: string) => {
-    setPaymentMethod(method);
-    setFormData(prev => ({ ...prev, paymentMethod: method }));
-  };
-
-  const handleInputChange = (field: keyof DonationFormData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setSelectedAmount(0);
   };
 
   const validateForm = (): boolean => {
-    const finalAmount = customAmount || selectedAmount;
-    return !!(
-      finalAmount &&
-      paymentMethod &&
-      formData.name &&
-      formData.email &&
-      formData.phone
-    );
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) {
-      alert('Veuillez remplir tous les champs obligatoires');
-      return;
+    const newErrors: string[] = [];
+    
+    const finalAmount = selectedAmount || parseInt(customAmount) || 0;
+    if (finalAmount < 1000) {
+      newErrors.push('Le montant minimum est de 1 000 Ariary');
+    }
+    
+    if (!donationType) {
+      newErrors.push('Veuillez sélectionner un type de don');
+    }
+    
+    if (!paymentMethod) {
+      newErrors.push('Veuillez sélectionner une méthode de paiement');
+    }
+    
+    if (!donorInfo.name.trim()) {
+      newErrors.push('Le nom est requis');
+    }
+    
+    if (!donorInfo.email.trim() || !/\S+@\S+\.\S+/.test(donorInfo.email)) {
+      newErrors.push('Une adresse email valide est requise');
+    }
+    
+    if (!donorInfo.phone.trim()) {
+      newErrors.push('Le numéro de téléphone est requis');
     }
 
-    const finalAmount = customAmount || selectedAmount;
-    const submissionData = {
-      ...formData,
-      amount: finalAmount,
-      paymentMethod
-    };
-
-    console.log('Donation submitted:', submissionData);
-    setIsSubmitted(true);
+    setErrors(newErrors);
+    return newErrors.length === 0;
   };
 
-  if (isSubmitted) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    setIsSubmitting(false);
+    setSubmitted(true);
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('fr-MG', {
+      style: 'currency',
+      currency: 'MGA',
+      minimumFractionDigits: 0
+    }).format(amount);
+  };
+
+  if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-        <div className="container mx-auto px-4 py-20">
-          <Card className="max-w-2xl mx-auto bg-white/80 backdrop-blur-lg border-0 shadow-2xl">
-            <CardContent className="text-center p-12">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Check className="w-10 h-10 text-green-600" />
-              </div>
-              <h1 className="text-3xl font-bold text-gray-800 mb-4">
-                Merci pour votre générosité !
-              </h1>
-              <p className="text-gray-600 mb-8 leading-relaxed">
-                Votre don contribuera à la construction de notre nouvelle église.
-                Vous recevrez bientôt une confirmation par email avec les détails
-                de votre contribution.
-              </p>
-              <Button
-                onClick={() => setIsSubmitted(false)}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-              >
-                Faire un autre don
-              </Button>
-            </CardContent>
-          </Card>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-violet-100">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-2xl mx-auto text-center">
+            <Card className="backdrop-blur-lg bg-white/30 border-white/20 shadow-2xl">
+              <CardContent className="p-12">
+                <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-10 h-10 text-white" />
+                </div>
+                <h1 className="text-3xl font-bold text-gray-800 mb-4">
+                  Merci pour votre générosité !
+                </h1>
+                <p className="text-lg text-gray-600 mb-8">
+                  Votre don de {formatCurrency(selectedAmount || parseInt(customAmount) || 0)} a été reçu avec gratitude. 
+                  Vous recevrez bientôt les instructions de paiement par email.
+                </p>
+                <Button 
+                  onClick={() => window.location.reload()} 
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                >
+                  Faire un autre don
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-violet-100">
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-indigo-600/10"></div>
-        <div className="container mx-auto px-4 relative">
+      <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-violet-700 text-white">
+        <div className="absolute inset-0 bg-black/20" />
+        <div className="relative container mx-auto px-4 py-24">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="w-24 h-24 bg-white/80 backdrop-blur-lg rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
-              <Church className="w-12 h-12 text-blue-600" />
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <Church className="w-8 h-8" />
+              </div>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
-              Construisons Ensemble
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                Notre Maison de Dieu
-              </span>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Soutenez Notre Mission
             </h1>
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto">
-              Rejoignez-nous dans ce projet sacré de construction de notre nouvelle église.
-              Chaque contribution, petite ou grande, nous rapproche de notre objectif
-              et renforce notre communauté dans la foi.
+            <p className="text-xl md:text-2xl mb-8 opacity-90">
+              FPVM FR-MG TENY FIAINANA ANALAMAHITSY
             </p>
-            
-            {/* Progress Tracker */}
-            <Card className="bg-white/80 backdrop-blur-lg border-0 shadow-xl max-w-2xl mx-auto">
-              <CardContent className="p-8">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2 text-gray-600">
-                    <Target className="w-5 h-5" />
-                    <span className="font-medium">Objectif: 50 000 000 Ar</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-green-600">
-                    <Heart className="w-5 h-5" />
-                    <span className="font-medium">Collecté: 15 000 000 Ar</span>
-                  </div>
-                </div>
-                <Progress value={progressPercentage} className="h-3 mb-4" />
-                <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    <span>147 donateurs</span>
-                  </div>
-                  <div className="text-2xl font-bold text-blue-600">
-                    {Math.round(progressPercentage)}% atteint
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <p className="text-lg md:text-xl max-w-3xl mx-auto opacity-80">
+              Votre générosité nous aide à construire un lieu de culte moderne et à développer 
+              nos ministères pour servir notre communauté grandissante.
+            </p>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Donation Form Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-8">
-              {/* Left Column - Donation Details */}
-              <div className="space-y-8">
-                {/* Amount Selection */}
-                <Card className="bg-white/80 backdrop-blur-lg border-0 shadow-xl">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-2xl">
-                      <Heart className="w-6 h-6 text-red-500" />
-                      Choisissez votre don
-                    </CardTitle>
-                    <CardDescription>
-                      Sélectionnez un montant ou entrez le montant de votre choix
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-2 gap-3">
-                      {donationAmounts.map((amount) => (
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Donation Form */}
+          <div className="lg:col-span-2">
+            <Card className="backdrop-blur-lg bg-white/40 border-white/20 shadow-2xl">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Heart className="w-6 h-6 text-red-500" />
+                  Faire un don
+                </CardTitle>
+                <CardDescription>
+                  Chaque contribution compte pour l'avancement de l'œuvre de Dieu
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  {/* Error Messages */}
+                  {errors.length > 0 && (
+                    <Alert className="border-red-200 bg-red-50">
+                      <AlertCircle className="w-4 h-4 text-red-600" />
+                      <AlertDescription className="text-red-800">
+                        <ul className="list-disc list-inside space-y-1">
+                          {errors.map((error, index) => (
+                            <li key={index}>{error}</li>
+                          ))}
+                        </ul>
+                      </AlertDescription>
+                    </Alert>
+                  )}
+
+                  {/* Amount Selection */}
+                  <div className="space-y-4">
+                    <Label className="text-lg font-semibold">Montant du don (Ariary)</Label>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      {predefinedAmounts.map((amount) => (
                         <Button
-                          key={amount.value}
+                          key={amount}
                           type="button"
-                          variant={selectedAmount === amount.value ? "default" : "outline"}
-                          className={`h-14 text-lg transition-all duration-300 ${
-                            selectedAmount === amount.value
-                              ? 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg scale-105'
-                              : 'hover:scale-105 hover:shadow-md'
-                          }`}
-                          onClick={() => handleAmountSelect(amount.value)}
+                          variant={selectedAmount === amount ? "default" : "outline"}
+                          onClick={() => handleAmountSelect(amount)}
+                          className="h-12 transition-all duration-200 hover:scale-105"
                         >
-                          {amount.label}
+                          {formatCurrency(amount)}
                         </Button>
                       ))}
                     </div>
-                    
-                    <div className="relative">
-                      <Label htmlFor="custom-amount" className="text-sm font-medium text-gray-700">
-                        Montant personnalisé (Ariary)
-                      </Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="custom-amount">Montant personnalisé</Label>
                       <Input
                         id="custom-amount"
                         type="number"
                         placeholder="Entrez votre montant"
                         value={customAmount}
                         onChange={(e) => handleCustomAmountChange(e.target.value)}
-                        className="mt-2 h-12 text-lg"
+                        className="backdrop-blur-sm bg-white/50"
                       />
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
 
-                {/* Payment Method */}
-                <Card className="bg-white/80 backdrop-blur-lg border-0 shadow-xl">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-2xl">
-                      <CreditCard className="w-6 h-6 text-green-600" />
-                      Mode de paiement
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <RadioGroup value={paymentMethod} onValueChange={handlePaymentMethodChange}>
-                      <div className="grid grid-cols-1 gap-4">
-                        {paymentMethods.map((method) => {
-                          const IconComponent = method.icon;
-                          return (
-                            <div
-                              key={method.value}
-                              className={`flex items-center space-x-3 p-4 rounded-lg border-2 transition-all duration-300 cursor-pointer ${
-                                paymentMethod === method.value
-                                  ? 'border-blue-500 bg-blue-50'
-                                  : 'border-gray-200 hover:border-gray-300'
-                              }`}
-                              onClick={() => handlePaymentMethodChange(method.value)}
-                            >
-                              <RadioGroupItem value={method.value} id={method.value} />
-                              <IconComponent className="w-5 h-5 text-gray-600" />
-                              <Label htmlFor={method.value} className="flex-1 cursor-pointer font-medium">
-                                {method.label}
-                              </Label>
-                            </div>
-                          );
-                        })}
+                  <Separator />
+
+                  {/* Donation Type */}
+                  <div className="space-y-4">
+                    <Label className="text-lg font-semibold">Type de don</Label>
+                    <RadioGroup value={donationType} onValueChange={setDonationType}>
+                      <div className="flex items-center space-x-2 p-3 rounded-lg hover:bg-white/20 transition-colors">
+                        <RadioGroupItem value="construction" id="construction" />
+                        <Label htmlFor="construction" className="flex items-center gap-2 cursor-pointer">
+                          <Building className="w-4 h-4" />
+                          Construction de l'église
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2 p-3 rounded-lg hover:bg-white/20 transition-colors">
+                        <RadioGroupItem value="ministry" id="ministry" />
+                        <Label htmlFor="ministry" className="flex items-center gap-2 cursor-pointer">
+                          <Users className="w-4 h-4" />
+                          Ministères et programmes
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2 p-3 rounded-lg hover:bg-white/20 transition-colors">
+                        <RadioGroupItem value="general" id="general" />
+                        <Label htmlFor="general" className="flex items-center gap-2 cursor-pointer">
+                          <Church className="w-4 h-4" />
+                          Fonds général
+                        </Label>
                       </div>
                     </RadioGroup>
-                  </CardContent>
-                </Card>
-              </div>
+                  </div>
 
-              {/* Right Column - Donor Information */}
-              <div className="space-y-8">
-                <Card className="bg-white/80 backdrop-blur-lg border-0 shadow-xl">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-2xl">
-                      <Users className="w-6 h-6 text-purple-600" />
-                      Vos informations
-                    </CardTitle>
-                    <CardDescription>
-                      Ces informations nous permettront de vous remercier et de vous tenir informé
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div>
-                      <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-                        Nom complet *
-                      </Label>
-                      <Input
-                        id="name"
-                        type="text"
-                        placeholder="Votre nom complet"
-                        value={formData.name}
-                        onChange={(e) => handleInputChange('name', e.target.value)}
-                        className="mt-2 h-12"
-                        required
-                      />
+                  <Separator />
+
+                  {/* Donor Information */}
+                  <div className="space-y-4">
+                    <Label className="text-lg font-semibold">Vos informations</Label>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Nom complet *</Label>
+                        <Input
+                          id="name"
+                          value={donorInfo.name}
+                          onChange={(e) => setDonorInfo(prev => ({ ...prev, name: e.target.value }))}
+                          className="backdrop-blur-sm bg-white/50"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="email">Email *</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={donorInfo.email}
+                          onChange={(e) => setDonorInfo(prev => ({ ...prev, email: e.target.value }))}
+                          className="backdrop-blur-sm bg-white/50"
+                        />
+                      </div>
                     </div>
-
-                    <div>
-                      <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                        Email *
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="votre@email.com"
-                        value={formData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
-                        className="mt-2 h-12"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
-                        Téléphone *
-                      </Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Téléphone *</Label>
                       <Input
                         id="phone"
-                        type="tel"
-                        placeholder="+261 XX XX XXX XX"
-                        value={formData.phone}
-                        onChange={(e) => handleInputChange('phone', e.target.value)}
-                        className="mt-2 h-12"
-                        required
+                        value={donorInfo.phone}
+                        onChange={(e) => setDonorInfo(prev => ({ ...prev, phone: e.target.value }))}
+                        className="backdrop-blur-sm bg-white/50"
                       />
                     </div>
-
-                    <div>
-                      <Label htmlFor="message" className="text-sm font-medium text-gray-700">
-                        Message (optionnel)
-                      </Label>
+                    <div className="space-y-2">
+                      <Label htmlFor="message">Message (optionnel)</Label>
                       <Textarea
                         id="message"
-                        placeholder="Laissez un message d'encouragement ou une prière..."
-                        value={formData.message}
-                        onChange={(e) => handleInputChange('message', e.target.value)}
-                        className="mt-2 min-h-[100px]"
+                        value={donorInfo.message}
+                        onChange={(e) => setDonorInfo(prev => ({ ...prev, message: e.target.value }))}
+                        className="backdrop-blur-sm bg-white/50"
+                        rows={3}
                       />
                     </div>
-                  </CardContent>
-                </Card>
-
-                {/* Submit Button */}
-                <Button
-                  type="submit"
-                  className="w-full h-14 text-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-300"
-                  disabled={!validateForm()}
-                >
-                  Faire un don
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      {/* Contact Information */}
-      <section className="py-16 bg-gradient-to-r from-gray-50 to-gray-100">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">
-                Besoin d'aide ou d'informations ?
-              </h2>
-              <p className="text-gray-600 text-lg">
-                Notre équipe est là pour répondre à toutes vos questions
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              <Card className="bg-white/80 backdrop-blur-lg border-0 shadow-xl text-center">
-                <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Phone className="w-8 h-8 text-blue-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Téléphone</h3>
-                  <p className="text-gray-600">+261 XX XX XXX XX</p>
+
+                  <Separator />
+
+                  {/* Payment Method */}
+                  <div className="space-y-4">
+                    <Label className="text-lg font-semibold">Méthode de paiement</Label>
+                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
+                      <div className="flex items-center space-x-2 p-3 rounded-lg hover:bg-white/20 transition-colors">
+                        <RadioGroupItem value="mobile" id="mobile" />
+                        <Label htmlFor="mobile" className="flex items-center gap-2 cursor-pointer">
+                          <Smartphone className="w-4 h-4" />
+                          Mobile Money (Orange Money, MVola)
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2 p-3 rounded-lg hover:bg-white/20 transition-colors">
+                        <RadioGroupItem value="bank" id="bank" />
+                        <Label htmlFor="bank" className="flex items-center gap-2 cursor-pointer">
+                          <CreditCard className="w-4 h-4" />
+                          Virement bancaire
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2 p-3 rounded-lg hover:bg-white/20 transition-colors">
+                        <RadioGroupItem value="cash" id="cash" />
+                        <Label htmlFor="cash" className="flex items-center gap-2 cursor-pointer">
+                          <Banknote className="w-4 h-4" />
+                          Espèces (à l'église)
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
+                  {/* Submit Button */}
+                  <Button 
+                    type="submit" 
+                    className="w-full h-12 text-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-200 hover:scale-105"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Traitement en cours...
+                      </>
+                    ) : (
+                      'Confirmer le don'
+                    )}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Construction Progress */}
+            <Card className="backdrop-blur-lg bg-white/40 border-white/20 shadow-xl">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Building className="w-5 h-5" />
+                  Progression de la construction
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-600 mb-2">
+                    {currentProgress}%
+                  </div>
+                  <Progress value={currentProgress} className="h-3 mb-4" />
+                  <div className="text-sm text-gray-600">
+                    {formatCurrency(currentAmount)} collectés sur {formatCurrency(goalAmount)}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Impact Section */}
+            <Card className="backdrop-blur-lg bg-white/40 border-white/20 shadow-xl">
+              <CardHeader>
+                <CardTitle>Impact de vos dons</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2" />
+                    <div>
+                      <p className="font-semibold">10 000 Ar</p>
+                      <p className="text-sm text-gray-600">Matériaux de construction pour 1m²</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-purple-500 rounded-full mt-2" />
+                    <div>
+                      <p className="font-semibold">50 000 Ar</p>
+                      <p className="text-sm text-gray-600">Formation d'un leader jeunesse</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 bg-violet-500 rounded-full mt-2" />
+                    <div>
+                      <p className="font-semibold">100 000 Ar</p>
+                      <p className="text-sm text-gray-600">Équipement audio pour un mois</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Payment Instructions */}
+            {paymentMethod && (
+              <Card className="backdrop-blur-lg bg-white/40 border-white/20 shadow-xl">
+                <CardHeader>
+                  <CardTitle>Instructions de paiement</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm space-y-2">
+                  {paymentMethod === 'mobile' && (
+                    <div className="space-y-2">
+                      <p><strong>Orange Money:</strong> 032 XX XXX XX</p>
+                      <p><strong>MVola:</strong> 034 XX XXX XX</p>
+                      <p className="text-gray-600">Vous recevrez les coordonnées exactes par email</p>
+                    </div>
+                  )}
+                  {paymentMethod === 'bank' && (
+                    <div className="space-y-2">
+                      <p><strong>Banque:</strong> BNI Madagascar</p>
+                      <p><strong>Compte:</strong> XXXXXXXX</p>
+                      <p className="text-gray-600">RIB complet envoyé par email</p>
+                    </div>
+                  )}
+                  {paymentMethod === 'cash' && (
+                    <div className="space-y-2">
+                      <p><strong>Adresse:</strong> Analamahitsy</p>
+                      <p><strong>Horaires:</strong> Dimanche 8h-12h</p>
+                      <p className="text-gray-600">Voir le trésorier à l'accueil</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
+            )}
 
-              <Card className="bg-white/80 backdrop-blur-lg border-0 shadow-xl text-center">
-                <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Mail className="w-8 h-8 text-green-600" />
+            {/* Contact */}
+            <Card className="backdrop-blur-lg bg-white/40 border-white/20 shadow-xl">
+              <CardContent className="p-4">
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4" />
+                    <span>+261 XX XX XXX XX</span>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Email</h3>
-                  <p className="text-gray-600">contact@eglise.mg</p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-white/80 backdrop-blur-lg border-0 shadow-xl text-center">
-                <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <MapPin className="w-8 h-8 text-purple-600" />
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4" />
+                    <span>contact@fpvm-analamahitsy.org</span>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">Adresse</h3>
-                  <p className="text-gray-600">Antananarivo, Madagascar</p>
-                </CardContent>
-              </Card>
-            </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
