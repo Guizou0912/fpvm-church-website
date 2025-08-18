@@ -19,35 +19,67 @@ export default function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error status when user starts typing
+    if (submitStatus === "error") {
+      setSubmitStatus("idle");
+      setErrorMessage("");
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage("");
     
-    // Simulate form submission
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setSubmitStatus("success");
-      setFormData({ fullName: "", email: "", phone: "", subject: "", message: "" });
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone || null,
+          subject: formData.subject,
+          message: formData.message,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        setFormData({ fullName: "", email: "", phone: "", subject: "", message: "" });
+      } else {
+        setSubmitStatus("error");
+        setErrorMessage(result.error || "Une erreur s'est produite lors de l'envoi.");
+      }
     } catch (error) {
       setSubmitStatus("error");
+      setErrorMessage("Erreur de connexion. Veuillez vérifier votre connexion internet.");
+      console.error("Error submitting form:", error);
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => setSubmitStatus("idle"), 5000);
+      // Auto-clear status after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus("idle");
+        setErrorMessage("");
+      }, 5000);
     }
   };
 
   const isFormValid = formData.fullName && formData.email && formData.subject && formData.message;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-violet-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50">
       {/* Hero Section */}
       <section className="relative py-20 px-4">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-violet-600/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-purple-600/10"></div>
         <div className="relative max-w-7xl mx-auto text-center">
           <div className="backdrop-blur-md bg-white/80 rounded-3xl p-8 md:p-12 border border-white/20 shadow-xl">
             <h1 className="text-4xl md:text-6xl font-bold text-slate-800 mb-6 font-display">
@@ -80,14 +112,16 @@ export default function Contact() {
                 {submitStatus === "success" && (
                   <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3">
                     <CheckCircle className="h-5 w-5 text-green-600" />
-                    <span className="text-green-700">Votre message a été envoyé avec succès !</span>
+                    <span className="text-green-700">Votre message a été envoyé avec succès ! Nous vous répondrons bientôt.</span>
                   </div>
                 )}
 
                 {submitStatus === "error" && (
                   <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3">
                     <AlertCircle className="h-5 w-5 text-red-600" />
-                    <span className="text-red-700">Une erreur s'est produite. Veuillez réessayer.</span>
+                    <span className="text-red-700">
+                      {errorMessage || "Une erreur s'est produite. Veuillez réessayer."}
+                    </span>
                   </div>
                 )}
 
@@ -101,9 +135,10 @@ export default function Contact() {
                         id="fullName"
                         value={formData.fullName}
                         onChange={(e) => handleInputChange("fullName", e.target.value)}
-                        className="mt-2 bg-white/60 border-white/30 focus:bg-white/80"
+                        className="mt-2 bg-white/60 border-white/30 focus:bg-white/80 focus:border-purple-300"
                         placeholder="Votre nom complet"
                         required
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div>
@@ -115,9 +150,10 @@ export default function Contact() {
                         type="email"
                         value={formData.email}
                         onChange={(e) => handleInputChange("email", e.target.value)}
-                        className="mt-2 bg-white/60 border-white/30 focus:bg-white/80"
+                        className="mt-2 bg-white/60 border-white/30 focus:bg-white/80 focus:border-purple-300"
                         placeholder="votre.email@exemple.com"
                         required
+                        disabled={isSubmitting}
                       />
                     </div>
                   </div>
@@ -132,16 +168,21 @@ export default function Contact() {
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => handleInputChange("phone", e.target.value)}
-                        className="mt-2 bg-white/60 border-white/30 focus:bg-white/80"
+                        className="mt-2 bg-white/60 border-white/30 focus:bg-white/80 focus:border-purple-300"
                         placeholder="+261 XX XX XXX XX"
+                        disabled={isSubmitting}
                       />
                     </div>
                     <div>
                       <Label htmlFor="subject" className="text-slate-700 font-medium">
                         Sujet *
                       </Label>
-                      <Select onValueChange={(value) => handleInputChange("subject", value)} value={formData.subject}>
-                        <SelectTrigger className="mt-2 bg-white/60 border-white/30 focus:bg-white/80">
+                      <Select 
+                        onValueChange={(value) => handleInputChange("subject", value)} 
+                        value={formData.subject}
+                        disabled={isSubmitting}
+                      >
+                        <SelectTrigger className="mt-2 bg-white/60 border-white/30 focus:bg-white/80 focus:border-purple-300">
                           <SelectValue placeholder="Choisissez un sujet" />
                         </SelectTrigger>
                         <SelectContent>
@@ -165,16 +206,17 @@ export default function Contact() {
                       id="message"
                       value={formData.message}
                       onChange={(e) => handleInputChange("message", e.target.value)}
-                      className="mt-2 bg-white/60 border-white/30 focus:bg-white/80 min-h-[120px]"
+                      className="mt-2 bg-white/60 border-white/30 focus:bg-white/80 focus:border-purple-300 min-h-[120px]"
                       placeholder="Écrivez votre message ici..."
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
 
                   <Button
                     type="submit"
                     disabled={!isFormValid || isSubmitting}
-                    className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-medium py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
+                    className="w-full bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700 text-white font-medium py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <div className="flex items-center gap-2">
@@ -202,8 +244,8 @@ export default function Contact() {
                 
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="p-2 bg-blue-100 rounded-lg">
-                      <MapPin className="h-5 w-5 text-blue-600" />
+                    <div className="p-2 bg-purple-100 rounded-lg">
+                      <MapPin className="h-5 w-5 text-purple-600" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-slate-800 mb-1">Adresse</h4>
@@ -216,8 +258,8 @@ export default function Contact() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="p-2 bg-violet-100 rounded-lg">
-                      <Phone className="h-5 w-5 text-violet-600" />
+                    <div className="p-2 bg-purple-100 rounded-lg">
+                      <Phone className="h-5 w-5 text-purple-600" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-slate-800 mb-1">Téléphone</h4>
@@ -296,7 +338,7 @@ export default function Contact() {
                   </div>
                 </div>
 
-                <div className="mt-6 p-4 bg-blue-50/80 rounded-xl">
+                <div className="mt-6 p-4 bg-purple-50/80 rounded-xl">
                   <p className="text-sm text-slate-600 text-center">
                     Pour les urgences pastorales, contactez-nous à tout moment.
                   </p>
@@ -308,7 +350,7 @@ export default function Contact() {
       </section>
 
       {/* Map Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-blue-50/50 to-violet-50/50">
+      <section className="py-16 px-4 bg-gradient-to-r from-purple-50/50 to-purple-50/50">
         <div className="max-w-7xl mx-auto">
           <Card className="backdrop-blur-md bg-white/80 border-white/20 shadow-xl p-8 rounded-2xl">
             <h2 className="text-3xl font-bold text-slate-800 mb-6 text-center font-display">
