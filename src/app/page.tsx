@@ -1,373 +1,66 @@
-import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Heart, Cross, Users, Clock, MapPin, Phone, Mail, Calendar, BookOpen, Handshake, Star, ArrowRight, Play, Image as ImageIcon, ChevronRight } from "lucide-react";
 
 export default function Home() {
-  const serviceSchedule = [
-    { day: "Dimanche Matin", time: "08h00 - 11h00", type: "Service Principal" },
-    { day: "Dimanche Soir", time: "16h00 - 18h00", type: "Service du Soir" },
-    { day: "Mercredi Soir", time: "18h00 - 20h00", type: "Prière et Étude" },
-    { day: "Vendredi Soir", time: "18h00 - 20h00", type: "Ministère Jeunesse" }
-  ];
-
-  const recentEvents = [
-    {
-      title: "Conférence Spirituelle",
-      date: "15 Janvier 2024",
-      description: "Série de messages sur la croissance spirituelle",
-      image: "https://images.unsplash.com/photo-1507692049790-de58290a4334?w=400&h=300&fit=crop"
-    },
-    {
-      title: "Camp de Jeunes",
-      date: "28 Décembre 2023", 
-      description: "Retraite de trois jours pour les jeunes",
-      image: "https://images.unsplash.com/photo-1529390079861-591de354faf5?w=400&h=300&fit=crop"
-    },
-    {
-      title: "Action Caritative",
-      date: "20 Décembre 2023",
-      description: "Distribution de vivres aux familles démunies",
-      image: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=300&fit=crop"
-    }
-  ];
-
-  const ministries = [
-    {
-      icon: BookOpen,
-      title: "École Biblique",
-      description: "Formation spirituelle pour tous les âges"
-    },
-    {
-      icon: Users,
-      title: "Ministère Jeunesse",
-      description: "Programmes dédiés aux jeunes et étudiants"
-    },
-    {
-      icon: Heart,
-      title: "Action Sociale",
-      description: "Aide aux familles et à la communauté"
-    },
-    {
-      icon: Handshake,
-      title: "Groupes de Prière",
-      description: "Cercles de prière dans différents quartiers"
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50">
-      {/* Floating Donation Button */}
-      <Link href="/donation" className="fixed bottom-8 right-8 z-50">
-        <Button 
-          size="lg" 
-          className="bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 rounded-full px-6 py-3"
-        >
-          <Heart className="mr-2 h-5 w-5 animate-pulse" />
-          Faire un don
-        </Button>
-      </Link>
-
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-transparent to-purple-600/10" />
-        <div className="relative max-w-7xl mx-auto text-center">
-          <div className="backdrop-blur-md bg-white/80 rounded-3xl border border-white/20 shadow-xl p-12 mb-8">
-            <Badge variant="secondary" className="bg-purple-100/80 text-purple-800 mb-6 px-4 py-2">
-              Église Protestante FPVM
-            </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold text-slate-800 mb-6 leading-tight">
-              FPVM FR-MG<br />
-              <span className="bg-gradient-to-r from-purple-600 to-purple-600 bg-clip-text text-transparent">
-                TENY FIAINANA
-              </span>
-            </h1>
-            <h2 className="text-3xl md:text-4xl font-semibold text-purple-600 mb-8">
-              ANALAMAHITSY
-            </h2>
-            <p className="text-xl text-slate-600 mb-10 max-w-4xl mx-auto leading-relaxed">
-              "Car Dieu a tant aimé le monde qu'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu'il ait la vie éternelle."
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/about">
-                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700 text-white px-8 py-3 text-lg font-medium">
-                  Découvrir notre église
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="/contact">
-                <Button variant="outline" size="lg" className="backdrop-blur-md bg-white/60 border-white/30 hover:bg-white/80 px-8 py-3 text-lg font-medium">
-                  Nous contacter
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Service Times Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-slate-800 mb-6">Horaires des Services</h2>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-              Rejoignez-nous pour nos services de culte et moments de communion fraternelle
-            </p>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50 flex items-center justify-center p-8">
+      <div className="max-w-4xl mx-auto text-center">
+        <div className="backdrop-blur-md bg-white/80 rounded-3xl p-12 border border-white/20 shadow-xl">
+          <h1 className="text-5xl md:text-7xl font-bold text-slate-800 mb-6">
+            FPVM FR-MG
+          </h1>
+          <h2 className="text-2xl md:text-3xl text-purple-600 font-semibold mb-8">
+            TENY FIAINANA
+          </h2>
+          <p className="text-xl text-slate-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+            Bienvenue dans notre communauté de foi. Découvrez une église vivante où la Parole de Dieu transforme les vies.
+          </p>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {serviceSchedule.map((service, index) => (
-              <Card key={index} className="backdrop-blur-md bg-white/80 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                <CardContent className="p-6 text-center">
-                  <Clock className="h-12 w-12 text-purple-600 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-slate-800 mb-2">{service.day}</h3>
-                  <p className="text-2xl font-semibold text-purple-600 mb-2">{service.time}</p>
-                  <Badge variant="secondary" className="bg-purple-100/80 text-purple-800">
-                    {service.type}
-                  </Badge>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* About Preview Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-purple-50/50 to-purple-50/50">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold text-slate-800 mb-6">Notre Mission</h2>
-              <p className="text-lg text-slate-600 mb-6 leading-relaxed">
-                Depuis plus de 35 ans, l'église FPVM FR-MG TENY FIAINANA ANALAMAHITSY 
-                sert fidèlement la communauté avec l'amour du Christ. Notre nom "TENY FIAINANA" 
-                signifie "Parole de Vie", reflétant notre engagement à proclamer l'Évangile 
-                qui transforme les vies.
-              </p>
-              <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                Nous sommes une famille spirituelle unie dans la foi, l'espoir et l'amour, 
-                dédiée à l'adoration de Dieu, à l'édification mutuelle et au service de notre communauté.
-              </p>
-              <Link href="/about">
-                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700 text-white">
-                  En savoir plus
-                  <ChevronRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-            </div>
-            <Card className="backdrop-blur-md bg-white/80 border-white/20 shadow-xl">
-              <CardContent className="p-8">
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-purple-600 mb-2">250+</div>
-                    <p className="text-slate-600">Membres Actifs</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-purple-600 mb-2">35+</div>
-                    <p className="text-slate-600">Années de Service</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-purple-600 mb-2">15</div>
-                    <p className="text-slate-600">Programmes</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-purple-600 mb-2">500+</div>
-                    <p className="text-slate-600">Familles Aidées</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Recent Events Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-slate-800 mb-6">Événements Récents</h2>
-            <p className="text-lg text-slate-600">
-              Découvrez les derniers événements et activités de notre église
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            {recentEvents.map((event, index) => (
-              <Card key={index} className="backdrop-blur-md bg-white/80 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group overflow-hidden">
-                <div className="aspect-video overflow-hidden">
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-                <CardContent className="p-6">
-                  <Badge variant="secondary" className="bg-purple-100/80 text-purple-800 mb-3">
-                    {event.date}
-                  </Badge>
-                  <h3 className="text-xl font-bold text-slate-800 mb-3">{event.title}</h3>
-                  <p className="text-slate-600">{event.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          
-          <div className="text-center">
-            <Link href="/gallery">
-              <Button variant="outline" size="lg" className="backdrop-blur-md bg-white/60 border-white/30 hover:bg-white/80">
-                <ImageIcon className="mr-2 h-5 w-5" />
-                Voir toute la galerie
-              </Button>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <Link 
+              href="/contact" 
+              className="inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
+              Nous Contacter
             </Link>
+            
+            <button className="inline-flex items-center justify-center border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300">
+              Découvrir nos Cultes
+            </button>
           </div>
-        </div>
-      </section>
 
-      {/* Ministries Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-purple-50/50 to-purple-50/50">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-slate-800 mb-6">Nos Ministères</h2>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-              Découvrez les différents ministères et programmes de notre église qui 
-              touchent tous les aspects de la vie spirituelle et communautaire
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {ministries.map((ministry, index) => (
-              <Card key={index} className="backdrop-blur-md bg-white/80 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 text-center group">
-                <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <ministry.icon className="h-8 w-8 text-purple-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-4">{ministry.title}</h3>
-                  <p className="text-slate-600">{ministry.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Information Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <Card className="backdrop-blur-md bg-white/80 border-white/20 shadow-xl">
-            <CardContent className="p-12">
-              <div className="text-center mb-12">
-                <h2 className="text-4xl font-bold text-slate-800 mb-6">Visitez-nous</h2>
-                <p className="text-lg text-slate-600">
-                  Vous êtes les bienvenus dans notre église. Venez nous rencontrer !
-                </p>
+          <div className="mt-16 grid md:grid-cols-3 gap-8 text-center">
+            <div className="p-6">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
               </div>
-              
-              <div className="grid md:grid-cols-3 gap-8">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <MapPin className="h-8 w-8 text-purple-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-2">Adresse</h3>
-                  <p className="text-slate-600">
-                    Analamahitsy<br />
-                    Antananarivo, Madagascar
-                  </p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Phone className="h-8 w-8 text-purple-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-2">Téléphone</h3>
-                  <p className="text-slate-600">
-                    +261 34 XX XXX XX<br />
-                    +261 32 XX XXX XX
-                  </p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Mail className="h-8 w-8 text-purple-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-2">Email</h3>
-                  <p className="text-slate-600">
-                    contact@fpvmtenyfiainana.mg<br />
-                    pasteur@fpvmtenyfiainana.mg
-                  </p>
-                </div>
-              </div>
-              
-              <div className="text-center mt-12">
-                <Link href="/contact">
-                  <Button size="lg" className="bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700 text-white px-8 py-3">
-                    Nous contacter
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 px-4 bg-gradient-to-br from-slate-800 to-slate-900">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <Cross className="h-8 w-8 text-purple-400" />
-                <span className="font-bold text-xl text-white">FPVM TENY FIAINANA</span>
-              </div>
-              <p className="text-slate-300 leading-relaxed">
-                Une église qui transforme des vies par l'amour du Christ depuis 1985.
-              </p>
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">Communauté</h3>
+              <p className="text-slate-600">Une famille spirituelle unie dans l'amour du Christ</p>
             </div>
             
-            <div>
-              <h4 className="font-semibold text-white mb-4">Navigation</h4>
-              <div className="space-y-2">
-                <Link href="/about" className="block text-slate-300 hover:text-purple-400 transition-colors">
-                  À propos
-                </Link>
-                <Link href="/gallery" className="block text-slate-300 hover:text-purple-400 transition-colors">
-                  Galerie
-                </Link>
-                <Link href="/contact" className="block text-slate-300 hover:text-purple-400 transition-colors">
-                  Contact
-                </Link>
-                <Link href="/donation" className="block text-slate-300 hover:text-purple-400 transition-colors">
-                  Faire un don
-                </Link>
+            <div className="p-6">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
               </div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">Enseignement</h3>
+              <p className="text-slate-600">La Parole de Dieu enseignée avec clarté et vérité</p>
             </div>
             
-            <div>
-              <h4 className="font-semibold text-white mb-4">Horaires</h4>
-              <div className="space-y-2 text-slate-300">
-                <div>Dimanche: 08h-11h, 16h-18h</div>
-                <div>Mercredi: 18h-20h</div>
-                <div>Vendredi: 18h-20h</div>
+            <div className="p-6">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                </svg>
               </div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">Service</h3>
+              <p className="text-slate-600">Servir Dieu et notre prochain avec amour</p>
             </div>
-            
-            <div>
-              <h4 className="font-semibold text-white mb-4">Contact</h4>
-              <div className="space-y-2 text-slate-300">
-                <div>Analamahitsy</div>
-                <div>Antananarivo, Madagascar</div>
-                <div>contact@fpvmtenyfiainana.mg</div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="border-t border-slate-700 pt-8 text-center text-slate-400">
-            <p>&copy; 2024 FPVM FR-MG TENY FIAINANA ANALAMAHITSY. Tous droits réservés.</p>
           </div>
         </div>
-      </footer>
+      </div>
     </div>
   );
 }
